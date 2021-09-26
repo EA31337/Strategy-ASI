@@ -6,8 +6,8 @@
 
 /**
  * @file
- * Implements Demo strategy.
+ * Implements ASI strategy.
  */
 
 // Includes the main code.
-#include "Stg_Demo.mq5"
+#include "Stg_ASI.mq5"
