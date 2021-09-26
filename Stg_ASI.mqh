@@ -7,13 +7,13 @@
 INPUT_GROUP("ASI strategy: strategy params");
 INPUT float ASI_LotSize = 0;                // Lot size
 INPUT int ASI_SignalOpenMethod = 0;         // Signal open method
-INPUT float ASI_SignalOpenLevel = 0;        // Signal open level
+INPUT float ASI_SignalOpenLevel = 100.0f;   // Signal open level
 INPUT int ASI_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int ASI_SignalOpenFilterTime = 3;     // Signal open filter time (0-31)
 INPUT int ASI_SignalOpenBoostMethod = 0;    // Signal open boost method
 INPUT int ASI_SignalCloseMethod = 0;        // Signal close method
 INPUT int ASI_SignalCloseFilter = 32;       // Signal close filter (-127-127)
-INPUT float ASI_SignalCloseLevel = 0;       // Signal close level
+INPUT float ASI_SignalCloseLevel = 100.0f;  // Signal close level
 INPUT int ASI_PriceStopMethod = 0;          // Price limit method
 INPUT float ASI_PriceStopLevel = 2;         // Price limit level
 INPUT int ASI_TickFilterMethod = 32;        // Tick filter method (0-255)
@@ -31,16 +31,16 @@ INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_INDICATOR;  // Sour
 
 // Defines struct with default user indicator values.
 struct Indi_ASI_Params_Defaults : ASIParams {
-  Indi_ASI_Params_Defaults() : ASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift, PERIOD_CURRENT/*, ::ASI_Indi_ASI_SourceType*/) {}
+  Indi_ASI_Params_Defaults()
+      : ASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift, PERIOD_CURRENT /*, ::ASI_Indi_ASI_SourceType*/) {}
 };
 
 // Defines struct with default user strategy values.
 struct Stg_ASI_Params_Defaults : StgParams {
   Stg_ASI_Params_Defaults()
       : StgParams(::ASI_SignalOpenMethod, ::ASI_SignalOpenFilterMethod, ::ASI_SignalOpenLevel,
-                  ::ASI_SignalOpenBoostMethod, ::ASI_SignalCloseMethod, ::ASI_SignalCloseFilter,
-                  ::ASI_SignalCloseLevel, ::ASI_PriceStopMethod, ::ASI_PriceStopLevel, ::ASI_TickFilterMethod,
-                  ::ASI_MaxSpread, ::ASI_Shift) {
+                  ::ASI_SignalOpenBoostMethod, ::ASI_SignalCloseMethod, ::ASI_SignalCloseFilter, ::ASI_SignalCloseLevel,
+                  ::ASI_PriceStopMethod, ::ASI_PriceStopLevel, ::ASI_TickFilterMethod, ::ASI_MaxSpread, ::ASI_Shift) {
     Set(STRAT_PARAM_LS, ASI_LotSize);
     Set(STRAT_PARAM_OCL, ASI_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, ASI_OrderCloseProfit);
@@ -72,10 +72,10 @@ class Stg_ASI : public Strategy {
     Stg_ASI_Params_Defaults stg_asi_defaults;
     StgParams _stg_params(stg_asi_defaults);
 #ifdef __config__
-    SetParamsByTf<ASIIndiParams>(_indi_params, _tf, indi_asi_m1, indi_asi_m5, indi_asi_m15, indi_asi_m30,
-                                  indi_asi_h1, indi_asi_h4, indi_asi_h8);
-    SetParamsByTf<StgParams>(_stg_params, _tf, stg_asi_m1, stg_asi_m5, stg_asi_m15, stg_asi_m30, stg_asi_h1,
-                             stg_asi_h4, stg_asi_h8);
+    SetParamsByTf<ASIIndiParams>(_indi_params, _tf, indi_asi_m1, indi_asi_m5, indi_asi_m15, indi_asi_m30, indi_asi_h1,
+                                 indi_asi_h4, indi_asi_h8);
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_asi_m1, stg_asi_m5, stg_asi_m15, stg_asi_m30, stg_asi_h1, stg_asi_h4,
+                             stg_asi_h8);
 #endif
     // Initialize indicator.
     _stg_params.SetIndicator(new Indi_ASI(_indi_params));
@@ -101,14 +101,14 @@ class Stg_ASI : public Strategy {
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         // Buy signal.
-        _result &= _indi.IsIncreasing(1, 0, _shift);
-        _result &= _indi.IsIncByPct(_level / 10, 0, _shift, 2);
+        _result &= _indi.IsIncreasing(2, 0, _shift);
+        _result &= _indi.IsIncByPct(_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
       case ORDER_TYPE_SELL:
         // Sell signal.
-        _result &= _indi.IsDecreasing(1, 0, _shift);
-        _result &= _indi.IsDecByPct(_level / 10, 0, _shift, 2);
+        _result &= _indi.IsDecreasing(2, 0, _shift);
+        _result &= _indi.IsDecByPct(_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
     }
