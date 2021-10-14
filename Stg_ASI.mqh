@@ -31,8 +31,9 @@ INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_INDICATOR;  // Sour
 
 // Defines struct with default user indicator values.
 struct Indi_ASI_Params_Defaults : ASIParams {
-  Indi_ASI_Params_Defaults()
-      : ASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift, PERIOD_CURRENT /*, ::ASI_Indi_ASI_SourceType*/) {}
+  Indi_ASI_Params_Defaults() : ASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift) {
+    SetDataSourceType(::ASI_Indi_ASI_SourceType);
+  }
 };
 
 // Defines struct with default user strategy values.
