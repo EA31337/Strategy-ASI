@@ -23,9 +23,9 @@ INPUT float ASI_OrderCloseLoss = 80;        // Order close loss
 INPUT float ASI_OrderCloseProfit = 80;      // Order close profit
 INPUT int ASI_OrderCloseTime = -30;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("ASI strategy: ASI indicator params");
-INPUT int ASI_Indi_ASI_MPC = 300.0f;                                     // Maximum price changing
-INPUT int ASI_Indi_ASI_Shift = 0;                                        // Shift
-INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_INDICATOR;  // Source type
+INPUT int ASI_Indi_ASI_MPC = 300.0f;                                       // Maximum price changing
+INPUT int ASI_Indi_ASI_Shift = 0;                                          // Shift
+INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_ONCALCULATE;  // Source type
 
 // Structs.
 
