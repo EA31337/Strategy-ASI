@@ -30,8 +30,8 @@ INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_ONCALCULATE;  // So
 // Structs.
 
 // Defines struct with default user indicator values.
-struct Indi_ASI_Params_Defaults : ASIParams {
-  Indi_ASI_Params_Defaults() : ASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift) {
+struct Indi_ASI_Params_Defaults : IndiASIParams {
+  Indi_ASI_Params_Defaults() : IndiASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift) {
     SetDataSourceType(::ASI_Indi_ASI_SourceType);
   }
 };
@@ -69,7 +69,7 @@ class Stg_ASI : public Strategy {
   static Stg_ASI *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
     Indi_ASI_Params_Defaults _indi_asi_defaults;
-    ASIParams _indi_params(_indi_asi_defaults, _tf);
+    IndiASIParams _indi_params(_indi_asi_defaults, _tf);
     Stg_ASI_Params_Defaults stg_asi_defaults;
     StgParams _stg_params(stg_asi_defaults);
 #ifdef __config__
