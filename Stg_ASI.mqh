@@ -68,13 +68,9 @@ class Stg_ASI : public Strategy {
 
   static Stg_ASI *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
-    Indi_ASI_Params_Defaults _indi_asi_defaults;
-    IndiASIParams _indi_params(_indi_asi_defaults, _tf);
     Stg_ASI_Params_Defaults stg_asi_defaults;
     StgParams _stg_params(stg_asi_defaults);
 #ifdef __config__
-    SetParamsByTf<ASIIndiParams>(_indi_params, _tf, indi_asi_m1, indi_asi_m5, indi_asi_m15, indi_asi_m30, indi_asi_h1,
-                                 indi_asi_h4, indi_asi_h8);
     SetParamsByTf<StgParams>(_stg_params, _tf, stg_asi_m1, stg_asi_m5, stg_asi_m15, stg_asi_m30, stg_asi_h1, stg_asi_h4,
                              stg_asi_h8);
 #endif
@@ -83,8 +79,16 @@ class Stg_ASI : public Strategy {
     ChartParams _cparams(_tf, _Symbol);
     TradeParams _tparams;
     Strategy *_strat = new Stg_ASI(_stg_params, _tparams, _cparams, "ASI");
-    _strat.SetIndicator(new Indi_ASI(_indi_params));
     return _strat;
+  }
+
+  /**
+   * Event on strategy's init.
+   */
+  void OnInit() {
+    Indi_ASI_Params_Defaults _indi_asi_defaults;
+    IndiASIParams _indi_params(_indi_asi_defaults, Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
+    SetIndicator(new Indi_ASI(_indi_params));
   }
 
   /**
