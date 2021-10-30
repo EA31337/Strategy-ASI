@@ -29,13 +29,6 @@ INPUT ENUM_IDATA_SOURCE_TYPE ASI_Indi_ASI_SourceType = IDATA_ONCALCULATE;  // So
 
 // Structs.
 
-// Defines struct with default user indicator values.
-struct Indi_ASI_Params_Defaults : IndiASIParams {
-  Indi_ASI_Params_Defaults() : IndiASIParams(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift) {
-    SetDataSourceType(::ASI_Indi_ASI_SourceType);
-  }
-};
-
 // Defines struct with default user strategy values.
 struct Stg_ASI_Params_Defaults : StgParams {
   Stg_ASI_Params_Defaults()
@@ -86,8 +79,8 @@ class Stg_ASI : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    Indi_ASI_Params_Defaults _indi_asi_defaults;
-    IndiASIParams _indi_params(_indi_asi_defaults, Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
+    IndiASIParams _indi_params(::ASI_Indi_ASI_MPC, ::ASI_Indi_ASI_Shift);
+    _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
     SetIndicator(new Indi_ASI(_indi_params));
   }
 
